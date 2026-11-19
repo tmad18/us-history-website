@@ -238,3 +238,48 @@ a { color: var(--accent); }
 @media (max-width: 760px) {
   .results { max-height: 320px; overflow-y: auto; }
 }
+
+/* Games */
+.game-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.game-tabs button {
+  font: inherit; font-weight: 600; font-size: .92rem; cursor: pointer;
+  padding: 8px 16px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+}
+.game-tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.game-box {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 24px; box-shadow: var(--shadow); min-height: 260px;
+}
+.game-progress { font-size: .85rem; font-weight: 600; color: var(--muted); margin-bottom: .4rem; }
+.game-q { font-family: var(--serif); font-size: 1.25rem; margin-bottom: 1rem; }
+.game-big { font-family: var(--serif); font-size: 1.6rem; font-weight: 700; margin: .5rem 0; }
+.game-feedback { color: var(--muted); min-height: 1.6em; }
+.quiz-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 8px; margin-bottom: 12px; }
+.quiz-opt, .match-card {
+  font: inherit; cursor: pointer; text-align: left; color: var(--text);
+  padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg);
+}
+.quiz-opt:hover:not(:disabled) { border-color: var(--accent); }
+.quiz-opt:disabled { cursor: default; }
+.right { border-color: #2e7d4f !important; background: color-mix(in srgb, #2e7d4f 14%, var(--surface)) !important; }
+.wrong { border-color: var(--accent-2) !important; background: color-mix(in srgb, var(--accent-2) 14%, var(--surface)) !important; }
+
+.order-list { list-style: decimal; margin: 0 0 16px; padding-left: 24px; display: grid; gap: 8px; }
+.order-list li {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg);
+}
+.order-text { flex: 1; font-weight: 500; }
+.small-btn { padding: 4px 10px; }
+.small-btn:disabled { opacity: .35; cursor: default; }
+
+.match-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr)); gap: 8px; margin-bottom: 12px; }
+.match-card {
+  min-height: 110px; text-align: center; font-size: .85rem; line-height: 1.35;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent); color: var(--bg); font-size: 1.6rem; font-family: var(--serif); font-weight: 700;
+}
+.match-card.flipped { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 400; font-size: .82rem; }
+.match-card.flipped.name { font-family: var(--serif); font-weight: 700; font-size: 1rem; }
+.match-card.done { border-color: #2e7d4f; background: color-mix(in srgb, #2e7d4f 14%, var(--surface)); cursor: default; }

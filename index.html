@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=3">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>">
 </head>
 <body>
@@ -20,6 +20,7 @@
         <a href="#timeline">Timeline</a>
         <a href="#documents">Documents</a>
         <a href="#people">People</a>
+        <a href="#games">Games</a>
         <a href="#notebook">Notebook</a>
         <a href="#research">Sources</a>
       </nav>
@@ -57,6 +58,21 @@
             <p class="muted">Pick a result to read it here.</p>
           </article>
         </div>
+      </div>
+    </section>
+
+    <section id="games" class="section">
+      <div class="wrap">
+        <h2>Games</h2>
+        <p class="muted">Take a break and test what you know.</p>
+        <div class="game-tabs" role="tablist" aria-label="Games">
+          <button type="button" role="tab" data-game="quiz" aria-selected="true">History Quiz</button>
+          <button type="button" role="tab" data-game="order" aria-selected="false">Timeline Sort</button>
+          <button type="button" role="tab" data-game="match" aria-selected="false">Memory Match</button>
+        </div>
+        <div class="game-box" id="game-quiz" role="tabpanel"></div>
+        <div class="game-box" id="game-order" role="tabpanel" hidden></div>
+        <div class="game-box" id="game-match" role="tabpanel" hidden></div>
       </div>
     </section>
 
@@ -132,6 +148,7 @@
     </div>
   </footer>
 
-  <script src="script.js?v=2"></script>
+  <script src="script.js?v=3"></script>
+  <script src="games.js?v=3"></script>
 </body>
 </html>
