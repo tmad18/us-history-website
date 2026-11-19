@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>US History — From Colonies to Today</title>
+  <meta name="description" content="A guide to United States history: eras, a timeline of key events, founding documents, and the people who shaped the nation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top">US History</a>
+      <nav class="nav" aria-label="Sections">
+        <a href="#eras">Eras</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#documents">Documents</a>
+        <a href="#people">People</a>
+        <a href="#research">Research</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">1607 – Present</p>
+        <h1>The story of the United States</h1>
+        <p class="lede">From the first colonies to the modern era — the events, documents, and people that shaped the nation.</p>
+        <form class="search" action="https://duckduckgo.com/" method="get" target="_blank" rel="noopener" role="search">
+          <label class="visually-hidden" for="q">Search US history on DuckDuckGo</label>
+          <input id="q" name="q" type="search" placeholder="Search a topic, e.g. Louisiana Purchase" required>
+          <button type="submit">Search DuckDuckGo</button>
+        </form>
+        <p class="search-note">Results open in a new tab.</p>
+      </div>
+    </section>
+
+    <section id="eras" class="section">
+      <div class="wrap">
+        <h2>Eras of American history</h2>
+        <div class="era-grid" id="era-grid"></div>
+      </div>
+    </section>
+
+    <section id="timeline" class="section alt">
+      <div class="wrap">
+        <h2>Timeline of key events</h2>
+        <div class="filters" id="filters" role="group" aria-label="Filter timeline by era"></div>
+        <ol class="timeline" id="timeline-list"></ol>
+      </div>
+    </section>
+
+    <section id="documents" class="section">
+      <div class="wrap">
+        <h2>Founding &amp; landmark documents</h2>
+        <div class="card-grid" id="doc-grid"></div>
+      </div>
+    </section>
+
+    <section id="people" class="section alt">
+      <div class="wrap">
+        <h2>People who shaped the nation</h2>
+        <div class="card-grid people" id="people-grid"></div>
+      </div>
+    </section>
+
+    <section id="research" class="section">
+      <div class="wrap">
+        <h2>Research sources</h2>
+        <p class="muted">Trusted places to read primary sources and go deeper.</p>
+        <ul class="sources">
+          <li><a href="https://www.archives.gov/founding-docs" target="_blank" rel="noopener">National Archives — America's Founding Documents</a></li>
+          <li><a href="https://www.loc.gov/collections/" target="_blank" rel="noopener">Library of Congress — Digital Collections</a></li>
+          <li><a href="https://openstax.org/details/books/us-history" target="_blank" rel="noopener">OpenStax — U.S. History (free textbook)</a></li>
+          <li><a href="https://www.gilderlehrman.org/history-resources" target="_blank" rel="noopener">Gilder Lehrman Institute — History Resources</a></li>
+          <li><a href="https://www.nps.gov/subjects/historyculture/index.htm" target="_blank" rel="noopener">National Park Service — History &amp; Culture</a></li>
+          <li><a href="https://avalon.law.yale.edu/subject_menus/18th.asp" target="_blank" rel="noopener">Yale Avalon Project — Historical Documents</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>A student project about United States history.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
