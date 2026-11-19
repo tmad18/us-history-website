@@ -20,7 +20,8 @@
         <a href="#timeline">Timeline</a>
         <a href="#documents">Documents</a>
         <a href="#people">People</a>
-        <a href="#research">Research</a>
+        <a href="#notebook">Notebook</a>
+        <a href="#research">Sources</a>
       </nav>
     </div>
   </header>
@@ -31,12 +32,52 @@
         <p class="eyebrow">1607 – Present</p>
         <h1>The story of the United States</h1>
         <p class="lede">From the first colonies to the modern era — the events, documents, and people that shaped the nation.</p>
-        <form class="search" action="https://duckduckgo.com/" method="get" target="_blank" rel="noopener" role="search">
-          <label class="visually-hidden" for="q">Search US history on DuckDuckGo</label>
-          <input id="q" name="q" type="search" placeholder="Search a topic, e.g. Louisiana Purchase" required>
-          <button type="submit">Search DuckDuckGo</button>
+        <form class="search" id="search-form" role="search">
+          <label class="visually-hidden" for="q">Research a US history topic</label>
+          <input id="q" name="q" type="search" placeholder="Research a topic, e.g. Louisiana Purchase" required>
+          <button type="submit">Research</button>
         </form>
-        <p class="search-note">Results open in a new tab.</p>
+        <p class="search-note">Read articles right here and save them to your research notebook.</p>
+      </div>
+    </section>
+
+    <section id="research-panel" class="section research-panel" hidden>
+      <div class="wrap">
+        <div class="panel-head">
+          <h2>Research</h2>
+          <button type="button" class="ghost" id="close-panel">Close</button>
+        </div>
+        <div class="panel-grid">
+          <div class="results-col">
+            <p class="muted small" id="results-status"></p>
+            <ol class="results" id="results"></ol>
+            <a class="small" id="ddg-link" href="https://duckduckgo.com/" target="_blank" rel="noopener">Search the wider web on DuckDuckGo ↗</a>
+          </div>
+          <article class="reader" id="reader" aria-live="polite">
+            <p class="muted">Pick a result to read it here.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="notebook" class="section alt">
+      <div class="wrap">
+        <div class="panel-head">
+          <h2>Research notebook</h2>
+          <button type="button" class="ghost" id="clear-notebook">Clear all</button>
+        </div>
+        <p class="muted">Saved articles and notes stay in this browser on this device.</p>
+        <div class="notebook-grid">
+          <div>
+            <h3>Saved sources</h3>
+            <ul class="saved" id="saved-list"></ul>
+          </div>
+          <div>
+            <label for="notes"><h3>Notes</h3></label>
+            <textarea id="notes" rows="12" placeholder="Write your notes, quotes, and citations here…"></textarea>
+            <p class="muted small" id="notes-status"></p>
+          </div>
+        </div>
       </div>
     </section>
 

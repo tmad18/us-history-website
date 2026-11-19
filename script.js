@@ -183,3 +183,186 @@ renderFilters();
 renderTimeline();
 renderDocuments();
 renderPeople();
+
+/* ---------- In-site research (Wikipedia) ---------- */
+const WIKI_API = "https://en.wikipedia.org/w/api.php";
+const SKIP_SECTIONS = new Set(["See also", "References", "External links", "Notes", "Further reading",
+  "Bibliography", "Sources", "Citations", "Footnotes", "Works cited", "Explanatory notes"]);
+
+const panel = document.getElementById("research-panel");
+const resultsEl = document.getElementById("results");
+const statusEl = document.getElementById("results-status");
+const reader = document.getElementById("reader");
+const ddgLink = document.getElementById("ddg-link");
+
+async function wiki(params) {
+  const url = WIKI_API + "?" + new URLSearchParams({ format: "json", origin: "*", ...params });
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Request failed: " + res.status);
+  return res.json();
+}
+
+function stripTags(html) {
+  const d = document.createElement("div");
+  d.innerHTML = html;
+  return d.textContent;
+}
+
+async function runSearch(q) {
+  panel.hidden = false;
+  panel.scrollIntoView();
+  ddgLink.href = "https://duckduckgo.com/?q=" + encodeURIComponent(q);
+  statusEl.textContent = "Searching…";
+  resultsEl.replaceChildren();
+  try {
+    const data = await wiki({ action: "query", list: "search", srsearch: q, srlimit: "12" });
+    const hits = data.query.search;
+    statusEl.textContent = hits.length ? `${hits.length} results for “${q}”` : `No results for “${q}”.`;
+    hits.forEach((h, i) => {
+      const li = el("li");
+      const b = el("button");
+      b.type = "button";
+      b.append(el("strong", null, h.title), el("span", null, stripTags(h.snippet) + "…"));
+      b.addEventListener("click", () => openArticle(h.title, b));
+      li.append(b);
+      resultsEl.append(li);
+      if (i === 0) openArticle(h.title, b, false);
+    });
+  } catch (err) {
+    statusEl.textContent = "Couldn't load results. Check your connection and try again.";
+  }
+}
+
+async function openArticle(title, btn, scroll = true) {
+  resultsEl.querySelectorAll("button").forEach((b) => b.removeAttribute("aria-current"));
+  if (btn) btn.setAttribute("aria-current", "true");
+  reader.replaceChildren(el("p", "muted", "Loading…"));
+  if (scroll && window.innerWidth <= 760) reader.scrollIntoView();
+  try {
+    const data = await wiki({
+      action: "query", prop: "extracts|pageimages|info", explaintext: "1", exsectionformat: "wiki",
+      piprop: "thumbnail", pithumbsize: "500", inprop: "url", redirects: "1", titles: title,
+    });
+    const page = Object.values(data.query.pages)[0];
+    renderArticle(page);
+  } catch (err) {
+    reader.replaceChildren(el("p", "muted", "Couldn't load this article."));
+  }
+}
+
+function renderArticle(page) {
+  reader.replaceChildren();
+  reader.scrollTop = 0;
+  const head = el("div", "reader-head");
+  head.append(el("h2", null, page.title));
+  const save = el("button", "primary");
+  save.type = "button";
+  const setSaveLabel = () => { save.textContent = isSaved(page.fullurl) ? "✓ Saved" : "Save to notebook"; };
+  setSaveLabel();
+  save.addEventListener("click", () => { toggleSaved(page.title, page.fullurl); setSaveLabel(); });
+  head.append(save, link(page.fullurl, "View on Wikipedia ↗"));
+  reader.append(head);
+
+  if (page.thumbnail) {
+    const img = el("img", "thumb");
+    img.src = page.thumbnail.source;
+    img.alt = page.title;
+    img.loading = "lazy";
+    reader.append(img);
+  }
+
+  let skipping = false;
+  let pendingHeading = null;
+  (page.extract || "").split("\n").forEach((raw) => {
+    const line = raw.trim();
+    if (!line) return;
+    const m = line.match(/^(=+)\s*(.*?)\s*=+$/);
+    if (m) {
+      const level = m[1].length;
+      if (level === 2) skipping = SKIP_SECTIONS.has(m[2]);
+      if (!skipping) pendingHeading = el(level === 2 ? "h3" : "h4", null, m[2]);
+      return;
+    }
+    if (skipping) return;
+    if (pendingHeading) { reader.append(pendingHeading); pendingHeading = null; }
+    reader.append(el("p", null, line));
+  });
+
+  const credit = el("p", "credit");
+  credit.append("Text from Wikipedia, available under ", link("https://creativecommons.org/licenses/by-sa/4.0/", "CC BY-SA 4.0"), ".");
+  reader.append(credit);
+}
+
+document.getElementById("search-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const q = document.getElementById("q").value.trim();
+  if (q) runSearch(q);
+});
+document.getElementById("close-panel").addEventListener("click", () => {
+  panel.hidden = true;
+  document.getElementById("top").scrollIntoView();
+});
+
+/* ---------- Research notebook ---------- */
+const NB_KEY = "ush-notebook";
+let notebook = { saved: [], notes: "" };
+try { notebook = { ...notebook, ...JSON.parse(localStorage.getItem(NB_KEY) || "{}") }; } catch (e) {}
+
+function persist() {
+  try { localStorage.setItem(NB_KEY, JSON.stringify(notebook)); return true; } catch (e) { return false; }
+}
+const isSaved = (url) => notebook.saved.some((s) => s.url === url);
+
+function toggleSaved(title, url) {
+  if (isSaved(url)) notebook.saved = notebook.saved.filter((s) => s.url !== url);
+  else notebook.saved.push({ title, url });
+  persist();
+  renderSaved();
+}
+
+function renderSaved() {
+  const list = document.getElementById("saved-list");
+  list.replaceChildren();
+  if (!notebook.saved.length) {
+    list.append(el("li", "empty", "Nothing saved yet. Use “Save to notebook” on any article."));
+    return;
+  }
+  notebook.saved.forEach((s) => {
+    const li = el("li");
+    const open = el("button", "title", s.title);
+    open.type = "button";
+    open.addEventListener("click", () => {
+      panel.hidden = false;
+      panel.scrollIntoView();
+      openArticle(s.title, null);
+    });
+    const rm = el("button", "remove", "×");
+    rm.type = "button";
+    rm.setAttribute("aria-label", "Remove " + s.title);
+    rm.addEventListener("click", () => toggleSaved(s.title, s.url));
+    li.append(open, rm);
+    list.append(li);
+  });
+}
+
+const notesEl = document.getElementById("notes");
+const notesStatus = document.getElementById("notes-status");
+notesEl.value = notebook.notes;
+let notesTimer;
+notesEl.addEventListener("input", () => {
+  clearTimeout(notesTimer);
+  notesTimer = setTimeout(() => {
+    notebook.notes = notesEl.value;
+    notesStatus.textContent = persist() ? "Saved" : "Couldn't save in this browser.";
+  }, 400);
+});
+
+document.getElementById("clear-notebook").addEventListener("click", () => {
+  if (!confirm("Clear all saved sources and notes?")) return;
+  notebook = { saved: [], notes: "" };
+  notesEl.value = "";
+  persist();
+  renderSaved();
+});
+
+renderSaved();
